@@ -17,4 +17,4 @@
 
 # Usage:
 ## chmod +x scanner.py
-## ./scanner.py ip start_port and end_port
+## ./scanner.py ip start_port end_port
