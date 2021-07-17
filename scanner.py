@@ -1,36 +1,43 @@
-# This scanner will scan ports from 50 to 85 and will return open ports
---------------------------------------------------------------------------
-
 #!/usr/bin/python3
+import socket 
+import sys
+import time 
+import threading
 
-import sys, socket
-from datetime import datetime
+usage = "\npython3 scanner.py TARGET START_PORT END_PORT" 
 
-if len(sys.argv) == 2:
-	target = socket.gethostbyname(sys.argv[1])
-else:
-	print("invalid amount of arguments")
-	print("syntax: python3 scanner.py <ip>")
-print("-" * 50)
-print("scanning target "+target)
-print("Time started: "+str(datetime.now())) 
-print("-" * 50)
+print("-"*70)
+print("                       Python Simple Port Scanner")
+print("-"*70)
 
-try: 
-	for port in range(50,85):
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		socket.setdefaulttimeout(1)
-		result = s.connect_ex((target,port))
-		if result == 0:
-			print("Port {} is open.".format(port))
-		s.close()
-except KeyboardInterrupt:
-	print("\nExiting program!")
-	sys.exit()
+start_time = time.time()     
+
+if (len(sys.argv) != 4):
+    print(usage)
+    sys.exit()
+try:
+    target = socket.gethostbyname(sys.argv[1])
 except socket.gaierror:
-	print("Hostname could not resolved.")
-	sys.exit()
-except socket.error:
-	print("Couldn't connect to server.")
-	sys.exit()
-	
+    print("Name resolution error")
+    sys.exit()
+
+start_port = int(sys.argv[2])
+end_port = int(sys.argv[3])
+
+print("Scanning target", target)
+
+def scan_port(port):
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(2)
+    conn = s.connect_ex((target, port)) #0 
+    if(not conn):
+        print("Port {} is OPEN".format(port))
+    s.close()
+
+for port in range(start_port, end_port+1):
+
+    thread = threading.Thread(target = scan_port, args = (port,))
+    thread.start()
+end_time = time.time()
+print("Time elapsed:", end_time - start_time, 's')                                                                                                                                                                                                                                            
