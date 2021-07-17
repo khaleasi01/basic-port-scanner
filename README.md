@@ -8,3 +8,9 @@
  #             > socket library in python which has some inbuilt functions
  #             > and basic python syntax
 #x-------------------------------------------------------------------------------------------------------------------x
+
+#Features:
+## This port scanner is faster than Nmap 
+
+#  Limitations :
+## Like the wellknown nmap it doesn't list out the versions and services running on the port.
